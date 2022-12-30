@@ -2,7 +2,11 @@
 
 A multimodal AI story teller, built with [Stable Diffusion](https://huggingface.co/spaces/stabilityai/stable-diffusion), GPT, and neural text-to-speech (TTS).
 
+Given a prompt as an opening line of a story, GPT writes the rest of the plot; Stable Diffusion draws an image for each sentence; a TTS model narrates each line, resulting in a fully animated video of a short story, replete with audio and visuals.
+
 ## Demo
+
+https://user-images.githubusercontent.com/25360440/210068543-e66ebdd9-7d4b-4bca-8db2-9e8b4d145037.mp4
 
 ## Quickstart
 
