@@ -31,7 +31,7 @@ make run
 
 ## Usage
 
-1. Load the model with defaults
+1. Load the model with defaults.
 
 ```python
 from storyteller import StoryTeller
@@ -54,3 +54,7 @@ config = StoryTellerConfig(
 story_teller = StoryTeller(config)
 story_teller.generate(...)
 ```
+
+## License
+
+Released under the [MIT License](LICENSE).
