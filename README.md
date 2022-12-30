@@ -4,9 +4,8 @@ A multimodal AI story teller, built with [Stable Diffusion](https://huggingface.
 
 Given a prompt as an opening line of a story, GPT writes the rest of the plot; Stable Diffusion draws an image for each sentence; a TTS model narrates each line, resulting in a fully animated video of a short story, replete with audio and visuals.
 
-## Demo
+![out](https://user-images.githubusercontent.com/25360440/210071764-51ed5872-ba56-4ed0-919b-d9ce65110185.gif)
 
-https://user-images.githubusercontent.com/25360440/210068543-e66ebdd9-7d4b-4bca-8db2-9e8b4d145037.mp4
 
 ## Quickstart
 
@@ -49,6 +48,7 @@ config = StoryTellerConfig(
     writer="gpt2-large",
     painter="CompVis/stable-diffusion-v1-4",
     max_new_tokens=100,
+    diffusion_prompt_prefix="Van Gogh style",
 )
 
 story_teller = StoryTeller(config)
