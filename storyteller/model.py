@@ -43,7 +43,7 @@ class StoryTeller:
 
     @torch.inference_mode()
     def paint(self, prompt) -> Image:
-        return self.painter(f"{self.config.diffusion_prefix}: {prompt}").images[0]
+        return self.painter(f"{self.config.diffusion_prompt_prefix}: {prompt}").images[0]
 
     @torch.inference_mode()
     def speak(self, prompt) -> List[int]:
