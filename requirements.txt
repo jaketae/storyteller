@@ -1,5 +1,4 @@
 transformers
 diffusers
 accelerate
-opencv-python
-speechbrain
+TTS
