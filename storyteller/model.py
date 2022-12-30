@@ -2,6 +2,7 @@ import logging
 import os
 from typing import List
 
+import nltk
 import soundfile as sf
 import torch
 from diffusers import StableDiffusionPipeline
@@ -11,7 +12,7 @@ from transformers import pipeline
 from TTS.api import TTS
 
 from .config import StoryTellerConfig
-from .utils import check_ffmpeg, make_timeline_string, subprocess_run, set_seed
+from .utils import check_ffmpeg, make_timeline_string, set_seed, subprocess_run
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 logging.getLogger("diffusers").setLevel(logging.CRITICAL)
@@ -21,6 +22,7 @@ logging.getLogger("transformers").setLevel(logging.CRITICAL)
 class StoryTeller:
     def __init__(self, config: StoryTellerConfig):
         check_ffmpeg()
+        nltk.download("punkt")
         set_seed(config.seed)
         self.config = config
         os.makedirs(config.output_dir, exist_ok=True)
@@ -43,7 +45,9 @@ class StoryTeller:
 
     @torch.inference_mode()
     def paint(self, prompt) -> Image:
-        return self.painter(f"{self.config.diffusion_prompt_prefix}: {prompt}").images[0]
+        return self.painter(f"{self.config.diffusion_prompt_prefix}: {prompt}").images[
+            0
+        ]
 
     @torch.inference_mode()
     def speak(self, prompt) -> List[int]:
