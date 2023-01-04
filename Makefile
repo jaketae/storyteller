@@ -15,4 +15,4 @@ clean:
 	rm -rf out
 
 run:
-	python demo.py
+	python -m storyteller
