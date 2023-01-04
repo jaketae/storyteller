@@ -19,12 +19,17 @@ dependencies = [
 "TTS",
 ]
 
+
+[project.scripts]
+storyteller = "storyteller.__main__:main"
+
 [project.optional-dependencies]
 dev = [
   "black",
   "flake8",
   "isort",
 ]
+
 
 [tool.isort]
 profile = "black"
