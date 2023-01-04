@@ -13,15 +13,16 @@ readme      = "README.md"
 license     = "MIT"
 
 dependencies = [
-"transformers",
-"diffusers",
-"accelerate",
-"TTS",
+  "accelerate",
+  "diffusers",
+  "transformers",
+  "TTS",
 ]
 
 
 [project.scripts]
 storyteller = "storyteller.__main__:main"
+
 
 [project.optional-dependencies]
 dev = [
