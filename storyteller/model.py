@@ -12,7 +12,7 @@ from transformers import pipeline
 from TTS.api import TTS
 
 from storyteller import StoryTellerConfig
-from storyteller import check_ffmpeg, make_timeline_string, set_seed, subprocess_run
+from storyteller.utils import check_ffmpeg, make_timeline_string, set_seed, subprocess_run
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 logging.getLogger("diffusers").setLevel(logging.CRITICAL)
