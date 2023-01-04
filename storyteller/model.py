@@ -33,8 +33,8 @@ class StoryTeller:
         )
         self.painter = StableDiffusionPipeline.from_pretrained(
             config.painter,
-            height=config.image_size,
-            width=config.image_size,
+            height=self.config.image_size,
+            width=self.config.image_size,
             use_auth_token=False,
         ).to(painter_device)
         self.speaker = TTS(config.speaker)
