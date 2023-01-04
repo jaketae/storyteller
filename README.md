@@ -18,8 +18,8 @@ git clone https://github.com/jaketae/storyteller.git
 2. Install package requirements.
 
 ```
-pip install -U pip wheel
-pip install -r requirements.txt
+pip install --upgrade pip wheel
+pip install -e .
 ```
 
 3. Run the demo. The final video will be saved as `/out/out.mp4`.

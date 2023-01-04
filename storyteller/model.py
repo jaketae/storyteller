@@ -11,8 +11,8 @@ from PIL.Image import Image
 from transformers import pipeline
 from TTS.api import TTS
 
-from .config import StoryTellerConfig
-from .utils import check_ffmpeg, make_timeline_string, set_seed, subprocess_run
+from storyteller import StoryTellerConfig
+from storyteller.utils import check_ffmpeg, make_timeline_string, set_seed, subprocess_run
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 logging.getLogger("diffusers").setLevel(logging.CRITICAL)
@@ -33,6 +33,8 @@ class StoryTeller:
         )
         self.painter = StableDiffusionPipeline.from_pretrained(
             config.painter,
+            height=self.config.image_size,
+            width=self.config.image_size,
             use_auth_token=False,
         ).to(painter_device)
         self.speaker = TTS(config.speaker)

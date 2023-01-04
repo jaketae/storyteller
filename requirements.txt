@@ -1,4 +1,0 @@
-transformers
-diffusers
-accelerate
-TTS
