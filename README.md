@@ -1,5 +1,8 @@
 # StoryTeller
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A multimodal AI story teller, built with [Stable Diffusion](https://huggingface.co/spaces/stabilityai/stable-diffusion), GPT, and neural text-to-speech (TTS).
 
 Given a prompt as an opening line of a story, GPT writes the rest of the plot; Stable Diffusion draws an image for each sentence; a TTS model narrates each line, resulting in a fully animated video of a short story, replete with audio and visuals.
@@ -12,20 +15,24 @@ Given a prompt as an opening line of a story, GPT writes the rest of the plot; S
 1. Clone the repository.
 
 ```
-git clone https://github.com/jaketae/storyteller.git
+$ git clone https://github.com/jaketae/storyteller.git
 ```
 
 2. Install package requirements.
 
 ```
-pip install --upgrade pip wheel
-pip install -e .
+$ pip install --upgrade pip wheel
+$ pip install -e .
+# for dev requirements, do:
+# pip install -e .[dev]
 ```
 
-3. Run the demo. The final video will be saved as `/out/out.mp4`.
+3. Run the demo. The final video will be saved as `/out/out.mp4`, alongside other intermediate images, audio files, and subtitles.
 
 ```
-make run
+$ storyteller
+# alternatively with make, do:
+# make run
 ```
 
 ## Usage
@@ -39,7 +46,7 @@ story_teller = StoryTeller.from_defaults()
 story_teller.generate(...)
 ```
 
-2. Configure the model with custom settings.
+2. Alternatively, configure the model with custom settings.
 
 ```python
 from storyteller import StoryTeller, StoryTellerConfig
