@@ -1,2 +1,2 @@
-from .config import StoryTellerConfig
-from .model import StoryTeller
+from storyteller.config import StoryTellerConfig
+from storyteller.model import StoryTeller
