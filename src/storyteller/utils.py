@@ -2,6 +2,7 @@ import os
 import random
 import shutil
 import subprocess
+from functools import wraps
 
 import nltk
 import numpy as np
@@ -11,6 +12,7 @@ import torch
 def require_ffmpeg(func):
     """Decorator for checking ffmpeg installation."""
 
+    @wraps(func)
     def wrapper_func(*args, **kwargs):
         if shutil.which("ffmpeg") is None:
             raise RuntimeError(
@@ -22,6 +24,9 @@ def require_ffmpeg(func):
 
 
 def require_punkt(func):
+    """Decorator for checking nltk punkt module."""
+
+    @wraps(func)
     def wrapper_func(*args, **kwargs):
         try:
             nltk.data.find("tokenizers/punkt")
