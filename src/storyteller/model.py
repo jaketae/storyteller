@@ -2,7 +2,6 @@ import logging
 import os
 from typing import List
 
-import nltk
 import soundfile as sf
 import torch
 from diffusers import StableDiffusionPipeline
@@ -12,7 +11,13 @@ from transformers import pipeline
 from TTS.api import TTS
 
 from storyteller import StoryTellerConfig
-from storyteller.utils import check_ffmpeg, make_timeline_string, set_seed, subprocess_run
+from storyteller.utils import (
+    make_timeline_string,
+    require_ffmpeg,
+    require_punkt,
+    set_seed,
+    subprocess_run,
+)
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 logging.getLogger("diffusers").setLevel(logging.CRITICAL)
@@ -20,9 +25,9 @@ logging.getLogger("transformers").setLevel(logging.CRITICAL)
 
 
 class StoryTeller:
+    @require_ffmpeg
+    @require_punkt
     def __init__(self, config: StoryTellerConfig):
-        check_ffmpeg()
-        nltk.download("punkt")
         set_seed(config.seed)
         self.config = config
         os.makedirs(config.output_dir, exist_ok=True)
@@ -61,6 +66,9 @@ class StoryTeller:
             "generated_text"
         ]
 
+    def get_output_path(self, file):
+        return os.path.join(self.config.output_dir, file)
+
     def generate(
         self,
         prompt: str,
@@ -74,18 +82,18 @@ class StoryTeller:
         self.concat_videos(video_paths)
 
     def concat_videos(self, video_paths: List[str]) -> None:
-        files_path = os.path.join(self.config.output_dir, "files.txt")
-        output_path = os.path.join(self.config.output_dir, "out.mp4")
+        files_path = self.get_output_path("files.txt")
+        output_path = self.get_output_path("out.mp4")
         with open(files_path, "w+") as f:
             for video_path in video_paths:
                 f.write(f"file {os.path.split(video_path)[-1]}\n")
         subprocess_run(f"ffmpeg -f concat -i {files_path} -c copy {output_path}")
 
     def _generate(self, id_: int, sentence: str) -> str:
-        image_path = os.path.join(self.config.output_dir, f"{id_}.png")
-        audio_path = os.path.join(self.config.output_dir, f"{id_}.wav")
-        subtitle_path = os.path.join(self.config.output_dir, f"{id_}.srt")
-        video_path = os.path.join(self.config.output_dir, f"{id_}.mp4")
+        image_path = self.get_output_path(f"{id_}.png")
+        audio_path = self.get_output_path(f"{id_}.wav")
+        subtitle_path = self.get_output_path(f"{id_}.srt")
+        video_path = self.get_output_path(f"{id_}.mp4")
         image = self.paint(sentence)
         image.save(image_path)
         audio = self.speak(sentence)
