@@ -2,7 +2,6 @@ import logging
 import os
 from typing import List
 
-import nltk
 import soundfile as sf
 import torch
 from diffusers import StableDiffusionPipeline
@@ -13,8 +12,9 @@ from TTS.api import TTS
 
 from storyteller import StoryTellerConfig
 from storyteller.utils import (
-    check_ffmpeg,
     make_timeline_string,
+    require_ffmpeg,
+    require_punkt,
     set_seed,
     subprocess_run,
 )
@@ -25,9 +25,9 @@ logging.getLogger("transformers").setLevel(logging.CRITICAL)
 
 
 class StoryTeller:
+    @require_ffmpeg
+    @require_punkt
     def __init__(self, config: StoryTellerConfig):
-        check_ffmpeg()
-        nltk.download("punkt")
         set_seed(config.seed)
         self.config = config
         os.makedirs(config.output_dir, exist_ok=True)

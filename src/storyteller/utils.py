@@ -3,14 +3,33 @@ import random
 import shutil
 import subprocess
 
+import nltk
 import numpy as np
 import torch
 
 
-def check_ffmpeg():
-    """Check ffmpeg installation."""
-    if shutil.which("ffmpeg") is None:
-        raise RuntimeError("`ffmpeg` not found. Please install `ffmpeg` and try again.")
+def require_ffmpeg(func):
+    """Decorator for checking ffmpeg installation."""
+
+    def wrapper_func():
+        if shutil.which("ffmpeg") is None:
+            raise RuntimeError(
+                "`ffmpeg` not found. Please install `ffmpeg` and try again."
+            )
+        func()
+
+    return wrapper_func
+
+
+def require_punkt(func):
+    def wrapper_func():
+        try:
+            nltk.data.find("tokenizers/punkt")
+        except LookupError:
+            nltk.download("punkt")
+        func()
+
+    return wrapper_func
 
 
 def make_timeline_string(start, end):
