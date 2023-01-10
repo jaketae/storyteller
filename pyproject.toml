@@ -1,37 +1,22 @@
-[build-system]
-requires = ["hatchling>=1.11.0"]
-build-backend = "hatchling.build"
-
-
-[project]
-requires-python = ">=3.8"
+[tool.poetry]
+name = "storyteller"
 version = "0.0.1"
+description = "Multimodal AI Story Teller, built with Stable Diffusion, GPT, and neural text-to-speech"
+authors = ["Jaesung Tae <jaesungtae@gmail.com>"]
+readme = "README.md"
+license = "MIT"
 
-name        = "storyteller"
-description = ""
-readme      = "README.md"
-license     = "MIT"
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+nltk = "^3.8.1"
+soundfile = "^0.11.0"
+tts = "^0.10.1"
+diffusers = "^0.11.1"
+transformers = "^4.25.1"
 
-dependencies = [
-  "accelerate",
-  "diffusers",
-  "transformers",
-  "TTS",
-]
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.21.0"
 
-
-[project.scripts]
-storyteller = "storyteller.__main__:main"
-
-
-[project.optional-dependencies]
-dev = [
-  "black",
-  "flake8",
-  "isort",
-]
-
-
-[tool.isort]
-profile = "black"
-force_sort_within_sections = true
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
