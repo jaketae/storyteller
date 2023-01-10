@@ -9,33 +9,74 @@ Given a prompt as an opening line of a story, GPT writes the rest of the plot; S
 
 ![out](https://user-images.githubusercontent.com/25360440/210071764-51ed5872-ba56-4ed0-919b-d9ce65110185.gif)
 
+## Installation
 
-## Quickstart
+### PyPI
+
+Story Teller is available on [PyPI](https://pypi.org/project/storyteller-core/).
+
+```
+$ pip install storyteller-core
+```
+
+### Source
 
 1. Clone the repository.
 
 ```
 $ git clone https://github.com/jaketae/storyteller.git
+$ cd storyteller
 ```
 
-2. Install package requirements.
+2. Install dependencies.
 
 ```
-$ pip install --upgrade pip wheel
-$ pip install -e .
-# for dev requirements, do:
-# pip install -e .[dev]
+$ pip install .
 ```
 
-3. Run the demo. The final video will be saved as `/out/out.mp4`, alongside other intermediate images, audio files, and subtitles.
+3. (Optional) To develop locally, install `dev` dependencies and install pre-commit hooks. This will automatically trigger liniting and code quality checks before each commit.
+
+```
+$ pip install -e .[dev]
+$ pre-commit install
+```
+
+## Quickstart
+
+The quickest way to run a demo is through the CLI. Simply type
 
 ```
 $ storyteller
-# alternatively with make, do:
-# make run
+```
+
+The final video will be saved as `/out/out.mp4`, alongside other intermediate images, audio files, and subtitles.
+
+To adjust the defaults with custom parametes, toggle the CLI flags as needed.
+
+```
+$ storyteller --help
+usage: storyteller [-h] [--prompt PROMPT] [--image_size IMAGE_SIZE] [--max_new_tokens MAX_NEW_TOKENS] [--writer WRITER]
+                   [--painter PAINTER] [--speaker SPEAKER] [--writer_device WRITER_DEVICE] [--painter_device PAINTER_DEVICE]
+                   [--output_dir OUTPUT_DIR] [--seed SEED] [--diffusion_prompt_prefix DIFFUSION_PROMPT_PREFIX]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --prompt PROMPT
+  --image_size IMAGE_SIZE
+  --max_new_tokens MAX_NEW_TOKENS
+  --writer WRITER
+  --painter PAINTER
+  --speaker SPEAKER
+  --writer_device WRITER_DEVICE
+  --painter_device PAINTER_DEVICE
+  --output_dir OUTPUT_DIR
+  --seed SEED
+  --diffusion_prompt_prefix DIFFUSION_PROMPT_PREFIX
 ```
 
 ## Usage
+
+For more advanced use cases, you can also directly interface with Story Teller in Python code.
 
 1. Load the model with defaults.
 
