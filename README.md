@@ -18,6 +18,8 @@ Given a prompt as an opening line of a story, GPT writes the rest of the plot; S
 $ git clone https://github.com/jaketae/storyteller.git
 ```
 
+*Note for Apple M1 users, `mecab-python3` is not available for M1. You would need to install `mecab` before running the following commands. You can do this with brew `brew install mecab` and continue with the next steps. You can get more information [here](https://github.com/SamuraiT/mecab-python3/issues/84).*
+
 2. Install package requirements.
 
 ```
