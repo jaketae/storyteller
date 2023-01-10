@@ -5,7 +5,7 @@ description = "Multimodal AI Story Teller, built with Stable Diffusion, GPT, and
 authors = ["Jaesung Tae <jaesungtae@gmail.com>"]
 readme = "README.md"
 license = "MIT"
-packages = [{include = "src/lm_identifier"}]
+packages = [{include = "src/storyteller"}]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
