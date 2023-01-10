@@ -11,23 +11,23 @@ import torch
 def require_ffmpeg(func):
     """Decorator for checking ffmpeg installation."""
 
-    def wrapper_func():
+    def wrapper_func(*args, **kwargs):
         if shutil.which("ffmpeg") is None:
             raise RuntimeError(
                 "`ffmpeg` not found. Please install `ffmpeg` and try again."
             )
-        func()
+        func(*args, **kwargs)
 
     return wrapper_func
 
 
 def require_punkt(func):
-    def wrapper_func():
+    def wrapper_func(*args, **kwargs):
         try:
             nltk.data.find("tokenizers/punkt")
         except LookupError:
             nltk.download("punkt")
-        func()
+        func(*args, **kwargs)
 
     return wrapper_func
 
