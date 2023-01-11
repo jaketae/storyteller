@@ -5,7 +5,7 @@ from dataclasses import fields
 from storyteller import StoryTeller, StoryTellerConfig
 
 
-def get_args():
+def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--prompt", type=str, default="Once upon a time, unicorns roamed the Earth."
@@ -17,7 +17,7 @@ def get_args():
     return args
 
 
-def main():
+def main() -> None:
     args = get_args()
     config = StoryTellerConfig()
     for field in fields(config):
