@@ -1,4 +1,3 @@
-import logging
 import os
 from typing import List
 
@@ -17,10 +16,6 @@ from storyteller.utils import (
     require_punkt,
     subprocess_run,
 )
-
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-logging.getLogger("diffusers").setLevel(logging.CRITICAL)
-logging.getLogger("transformers").setLevel(logging.CRITICAL)
 
 
 class StoryTeller:

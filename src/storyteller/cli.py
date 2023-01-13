@@ -1,10 +1,10 @@
 import argparse
 import dataclasses
+import logging
 import os
 
 from storyteller import StoryTeller, StoryTellerConfig
-
-from .utils import set_seed
+from storyteller.utils import set_log_level, set_seed
 
 
 def get_args() -> argparse.Namespace:
@@ -30,6 +30,8 @@ def get_args() -> argparse.Namespace:
 def main() -> None:
     args = get_args()
     set_seed(args.seed)
+    set_log_level(logging.WARNING)
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
     config = StoryTellerConfig()
     for field in dataclasses.fields(config):
         name = field.name

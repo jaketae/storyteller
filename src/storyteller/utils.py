@@ -1,3 +1,4 @@
+import logging
 import os
 import random
 import shutil
@@ -66,3 +67,8 @@ def set_seed(seed):
     torch.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = True
+
+
+def set_log_level(level: int) -> None:
+    """Disables specified logging level and below."""
+    logging.disable(level)
