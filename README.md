@@ -34,8 +34,7 @@ $ cd storyteller
 $ pip install .
 ```
 
-*Note: For Apple M1/2 users, [`mecab-python3`](https://github.com/SamuraiT/mecab-python3) is not available. You need to install `mecab` before running `pip install`. You can do this with [Hombrew](https://www.google.com/search?client=safari&rls=en&q=homebrew&ie=UTF-8&oe=UTF-8) via `brew install mecab`. For more information, refer to [this issue](https://github.com/SamuraiT/mecab-python3/issues/84).*
-
+> **Note**: For Apple M1/2 users, [`mecab-python3`](https://github.com/SamuraiT/mecab-python3) is not available. You need to install `mecab` before running `pip install`. You can do this with [Hombrew](https://www.google.com/search?client=safari&rls=en&q=homebrew&ie=UTF-8&oe=UTF-8) via `brew install mecab`. For more information, refer to https://github.com/SamuraiT/mecab-python3/issues/84.
 
 3. (Optional) To develop locally, install `dev` dependencies and install pre-commit hooks. This will automatically trigger linting and code quality checks before each commit.
 
