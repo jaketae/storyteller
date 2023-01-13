@@ -1,4 +1,3 @@
-import logging
 import os
 from typing import List
 
@@ -15,22 +14,15 @@ from storyteller.utils import (
     make_timeline_string,
     require_ffmpeg,
     require_punkt,
-    set_seed,
     subprocess_run,
 )
-
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-logging.getLogger("diffusers").setLevel(logging.CRITICAL)
-logging.getLogger("transformers").setLevel(logging.CRITICAL)
 
 
 class StoryTeller:
     @require_ffmpeg
     @require_punkt
     def __init__(self, config: StoryTellerConfig):
-        set_seed(config.seed)
         self.config = config
-        os.makedirs(config.output_dir, exist_ok=True)
         writer_device = torch.device(config.writer_device)
         painter_device = torch.device(config.writer_device)
         self.writer = pipeline(
@@ -38,12 +30,11 @@ class StoryTeller:
         )
         self.painter = StableDiffusionPipeline.from_pretrained(
             config.painter,
-            height=self.config.image_size,
-            width=self.config.image_size,
             use_auth_token=False,
         ).to(painter_device)
         self.speaker = TTS(config.speaker)
         self.sample_rate = self.speaker.synthesizer.output_sample_rate
+        self.output_dir = None
 
     @classmethod
     def from_default(cls):
@@ -51,33 +42,34 @@ class StoryTeller:
         return cls(config)
 
     @torch.inference_mode()
-    def paint(self, prompt) -> Image:
-        return self.painter(f"{self.config.diffusion_prompt_prefix}: {prompt}").images[
-            0
-        ]
+    def paint(self, prompt: str) -> Image:
+        return self.painter(prompt).images[0]
 
     @torch.inference_mode()
-    def speak(self, prompt) -> List[int]:
+    def speak(self, prompt: str) -> List[int]:
         return self.speaker.tts(prompt)
 
     @torch.inference_mode()
-    def write(self, prompt) -> str:
+    def write(self, prompt: str) -> str:
         return self.writer(prompt, max_new_tokens=self.config.max_new_tokens)[0][
             "generated_text"
         ]
 
-    def get_output_path(self, file):
-        return os.path.join(self.config.output_dir, file)
+    def get_output_path(self, file: str) -> str:
+        return os.path.join(self.output_dir, file)
 
     def generate(
         self,
-        prompt: str,
+        writer_prompt: str,
+        painter_prompt_prefix: str,
         num_images: int,
+        output_dir: str,
     ) -> None:
         video_paths = []
-        sentences = self.write_story(prompt, num_images)
+        self.output_dir = output_dir
+        sentences = self.write_story(writer_prompt, num_images)
         for i, sentence in enumerate(sentences):
-            video_path = self._generate(i, sentence)
+            video_path = self._generate(i, sentence, painter_prompt_prefix)
             video_paths.append(video_path)
         self.concat_videos(video_paths)
 
@@ -89,12 +81,12 @@ class StoryTeller:
                 f.write(f"file {os.path.split(video_path)[-1]}\n")
         subprocess_run(f"ffmpeg -f concat -i {files_path} -c copy {output_path}")
 
-    def _generate(self, id_: int, sentence: str) -> str:
+    def _generate(self, id_: int, sentence: str, painter_prompt_prefix: str) -> str:
         image_path = self.get_output_path(f"{id_}.png")
         audio_path = self.get_output_path(f"{id_}.wav")
         subtitle_path = self.get_output_path(f"{id_}.srt")
         video_path = self.get_output_path(f"{id_}.mp4")
-        image = self.paint(sentence)
+        image = self.paint(f"{painter_prompt_prefix} {sentence}")
         image.save(image_path)
         audio = self.speak(sentence)
         duration, remainder = divmod(len(audio), self.sample_rate)
@@ -110,11 +102,11 @@ class StoryTeller:
         )
         return video_path
 
-    def write_story(self, prompt: str, num_sentences: int) -> List[str]:
+    def write_story(self, writer_prompt: str, num_sentences: int) -> List[str]:
         sentences = []
         while len(sentences) < num_sentences + 1:
-            prompt = self.write(prompt)
-            sentences = sent_tokenize(prompt)
+            writer_prompt = self.write(writer_prompt)
+            sentences = sent_tokenize(writer_prompt)
         while len(sentences) > num_sentences:
             sentences.pop()
         return sentences

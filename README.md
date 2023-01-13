@@ -9,35 +9,79 @@ Given a prompt as an opening line of a story, GPT writes the rest of the plot; S
 
 ![out](https://user-images.githubusercontent.com/25360440/210071764-51ed5872-ba56-4ed0-919b-d9ce65110185.gif)
 
+## Installation
 
-## Quickstart
+### PyPI
+
+Story Teller is available on [PyPI](https://pypi.org/project/storyteller-core/).
+
+```
+$ pip install storyteller-core
+```
+
+### Source
 
 1. Clone the repository.
 
 ```
 $ git clone https://github.com/jaketae/storyteller.git
+$ cd storyteller
 ```
 
-*Note for Apple M1 users, `mecab-python3` is not available for M1. You would need to install `mecab` before running the following commands. You can do this with brew `brew install mecab` and continue with the next steps. You can get more information [here](https://github.com/SamuraiT/mecab-python3/issues/84).*
-
-2. Install package requirements.
+2. Install dependencies.
 
 ```
-$ pip install --upgrade pip wheel
-$ pip install -e .
-# for dev requirements, do:
-# pip install -e .[dev]
+$ pip install .
 ```
 
-3. Run the demo. The final video will be saved as `/out/out.mp4`, alongside other intermediate images, audio files, and subtitles.
+*Note: For Apple M1/2 users, [`mecab-python3`](https://github.com/SamuraiT/mecab-python3) is not available. You need to install `mecab` before running `pip install`. You can do this with [Hombrew](https://www.google.com/search?client=safari&rls=en&q=homebrew&ie=UTF-8&oe=UTF-8) via `brew install mecab`. For more information, refer to [this issue](https://github.com/SamuraiT/mecab-python3/issues/84).*
+
+
+3. (Optional) To develop locally, install `dev` dependencies and install pre-commit hooks. This will automatically trigger linting and code quality checks before each commit.
+
+```
+$ pip install -e .[dev]
+$ pre-commit install
+```
+
+## Quickstart
+
+The quickest way to run a demo is through the CLI. Simply type
 
 ```
 $ storyteller
-# alternatively with make, do:
-# make run
+```
+
+The final video will be saved as `/out/out.mp4`, alongside other intermediate images, audio files, and subtitles.
+
+To adjust the defaults with custom parametes, toggle the CLI flags as needed.
+
+```
+$ storyteller --help
+usage: storyteller [-h] [--writer_prompt WRITER_PROMPT]
+                   [--painter_prompt_prefix PAINTER_PROMPT_PREFIX] [--num_images NUM_IMAGES]
+                   [--output_dir OUTPUT_DIR] [--seed SEED] [--max_new_tokens MAX_NEW_TOKENS]
+                   [--writer WRITER] [--painter PAINTER] [--speaker SPEAKER]
+                   [--writer_device WRITER_DEVICE] [--painter_device PAINTER_DEVICE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --writer_prompt WRITER_PROMPT
+  --painter_prompt_prefix PAINTER_PROMPT_PREFIX
+  --num_images NUM_IMAGES
+  --output_dir OUTPUT_DIR
+  --seed SEED
+  --max_new_tokens MAX_NEW_TOKENS
+  --writer WRITER
+  --painter PAINTER
+  --speaker SPEAKER
+  --writer_device WRITER_DEVICE
+  --painter_device PAINTER_DEVICE
 ```
 
 ## Usage
+
+For more advanced use cases, you can also directly interface with Story Teller in Python code.
 
 1. Load the model with defaults.
 
