@@ -17,6 +17,7 @@ def get_args() -> argparse.Namespace:
     parser.add_argument(
         "--painter_prompt_prefix", type=str, default="Beautiful painting"
     )
+    parser.add_argument("--num_images", type=int, default=10)
     parser.add_argument("--output_dir", type=str, default="out")
     parser.add_argument("--seed", type=int, default=42)
     default_config = StoryTellerConfig()
