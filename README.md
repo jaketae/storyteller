@@ -88,7 +88,7 @@ For more advanced use cases, you can also directly interface with Story Teller i
 ```python
 from storyteller import StoryTeller
 
-story_teller = StoryTeller.from_defaults()
+story_teller = StoryTeller.from_default()
 story_teller.generate(...)
 ```
 
@@ -101,7 +101,6 @@ config = StoryTellerConfig(
     writer="gpt2-large",
     painter="CompVis/stable-diffusion-v1-4",
     max_new_tokens=100,
-    diffusion_prompt_prefix="Van Gogh style",
 )
 
 story_teller = StoryTeller(config)
