@@ -1,15 +1,24 @@
 import argparse
 import dataclasses
-from dataclasses import fields
+import os
 
 from storyteller import StoryTeller, StoryTellerConfig
+
+from .utils import set_seed
 
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--prompt", type=str, default="Once upon a time, unicorns roamed the Earth."
+        "--writer_prompt",
+        type=str,
+        default="Once upon a time, unicorns roamed the Earth.",
     )
+    parser.add_argument(
+        "--painter_prompt_prefix", type=str, default="Beautiful painting"
+    )
+    parser.add_argument("--output_dir", type=str, default="out")
+    parser.add_argument("--seed", type=int, default=42)
     default_config = StoryTellerConfig()
     for key, value in dataclasses.asdict(default_config).items():
         parser.add_argument(f"--{key}", type=type(value), default=value)
@@ -19,12 +28,16 @@ def get_args() -> argparse.Namespace:
 
 def main() -> None:
     args = get_args()
+    set_seed(args.seed)
     config = StoryTellerConfig()
-    for field in fields(config):
+    for field in dataclasses.fields(config):
         name = field.name
         setattr(config, name, getattr(args, name))
     story_teller = StoryTeller(config)
-    story_teller.generate(args.prompt, args.num_images)
+    os.makedirs(args.output_dir, exist_ok=True)
+    story_teller.generate(
+        args.writer_prompt, args.painter_prompt_prefix, args.num_images, args.output_dir
+    )
 
 
 if __name__ == "__main__":
