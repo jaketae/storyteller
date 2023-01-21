@@ -3,11 +3,11 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A multimodal AI story teller, built with [Stable Diffusion](https://huggingface.co/spaces/stabilityai/stable-diffusion), GPT, and neural text-to-speech (TTS).
+A multimodal AI storyteller, built with [Stable Diffusion](https://huggingface.co/spaces/stabilityai/stable-diffusion), GPT, and neural text-to-speech (TTS).
 
 Given a prompt as an opening line of a story, GPT writes the rest of the plot; Stable Diffusion draws an image for each sentence; a TTS model narrates each line, resulting in a fully animated video of a short story, replete with audio and visuals.
 
-![out](https://user-images.githubusercontent.com/25360440/210071764-51ed5872-ba56-4ed0-919b-d9ce65110185.gif)
+<img id="default-output" src="https://user-images.githubusercontent.com/25360440/210071764-51ed5872-ba56-4ed0-919b-d9ce65110185.gif" alt="Example output generated with the default prompt.">
 
 ## Installation
 
@@ -45,37 +45,56 @@ $ pre-commit install
 
 ## Quickstart
 
-The quickest way to run a demo is through the CLI. Simply type
+The quickest way to run a demo is by using the command line interface (CLI). To get started, simply type:
 
 ```
 $ storyteller
 ```
 
-The final video will be saved as `/out/out.mp4`, alongside other intermediate images, audio files, and subtitles.
+This command will initialize the story with the default prompt of `Once upon a time, unicorns roamed the Earth`. An
+example of the output that will be generated [can be seen in the animation above](#default-output).
+You can customize the beginning of your story by using the `--writer_prompt` argument. For example, if you would like to
+start your story with the text `The ravenous cat, driven by an insatiable craving for tuna, devised a daring plan to break into the local fish market's coveted tuna reserve.`, 
+your CLI command would look as follows:
 
-To adjust the defaults with custom parametes, toggle the CLI flags as needed.
+```
+storyteller --writer_prompt "The ravenous cat, driven by an insatiable craving for tuna, devised a daring plan to break into the local fish market's coveted tuna reserve."
+```
+
+The final video will be saved in the `/out/out.mp4` directory, along with other intermediate files such as images,
+audio files, and subtitles.
+
+To adjust the default settings with custom parameters, you can use the different CLI flags as needed. To see a list of 
+all available options, type:
 
 ```
 $ storyteller --help
-usage: storyteller [-h] [--writer_prompt WRITER_PROMPT]
-                   [--painter_prompt_prefix PAINTER_PROMPT_PREFIX] [--num_images NUM_IMAGES]
-                   [--output_dir OUTPUT_DIR] [--seed SEED] [--max_new_tokens MAX_NEW_TOKENS]
-                   [--writer WRITER] [--painter PAINTER] [--speaker SPEAKER]
-                   [--writer_device WRITER_DEVICE] [--painter_device PAINTER_DEVICE]
+```
 
-optional arguments:
+This will provide you with a list of the options, their descriptions and their defaults.
+
+
+```
+options:
   -h, --help            show this help message and exit
   --writer_prompt WRITER_PROMPT
+                        The prompt to be used for the writer model. This is the text with which your story will begin. Default: 'Once upon a time, unicorns roamed the Earth.'
   --painter_prompt_prefix PAINTER_PROMPT_PREFIX
+                        The prefix to be used for the painter model's prompt. Default: 'Beautiful painting'
   --num_images NUM_IMAGES
+                        The number of images to be generated. Those images will be composed in sequence into a video. Default: 10
   --output_dir OUTPUT_DIR
-  --seed SEED
+                        The directory to save the generated files to. Default: 'out'
+  --seed SEED           The seed value to be used for randomization. Default: 42
   --max_new_tokens MAX_NEW_TOKENS
-  --writer WRITER
-  --painter PAINTER
-  --speaker SPEAKER
+                        Maximum number of new tokens to generate in the writer model. Default: 50
+  --writer WRITER       Text generation model to use. Default: 'gpt2'
+  --painter PAINTER     Image generation model to use. Default: 'stabilityai/stable-diffusion-2'
+  --speaker SPEAKER     Text-to-speech (TTS) generation model. Default: 'tts_models/en/ljspeech/glow-tts'
   --writer_device WRITER_DEVICE
+                        Text generation device to use. Default: 'cpu'
   --painter_device PAINTER_DEVICE
+                        Image generation device to use. Default: 'cpu'
 ```
 
 ## Usage
