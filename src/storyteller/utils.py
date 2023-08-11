@@ -43,9 +43,12 @@ def require_punkt(func: Callable) -> Callable:
 def get_default_device():
     if torch.cuda.is_available():
         return "cuda"
+    # int64 cumsum does not work with mps
+    # see https://github.com/pytorch/pytorch/issues/96610
     torch_version = packaging.version.parse(torch.__version__)
     target_torch_version = packaging.version.parse("2.1.0.dev")
     if torch_version >= target_torch_version and torch.backends.mps.is_available():
+        # fallback to cpu if mps kernel does not exist
         os.putenv("PYTORCH_ENABLE_MPS_FALLBACK", "1")
         return "mps"
     return "cpu"
