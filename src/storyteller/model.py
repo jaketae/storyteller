@@ -43,7 +43,7 @@ class StoryTeller:
         self.output_dir = None
 
     @classmethod
-    def from_default(cls):
+    def from_default(cls) -> "StoryTeller":
         config = StoryTellerConfig()
         return cls(config)
 
