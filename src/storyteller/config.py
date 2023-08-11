@@ -4,7 +4,7 @@ import sys
 from dataclasses import dataclass
 from typing import Dict, Type
 
-from storyteller.utils import get_default_device
+import torch
 
 
 @dataclass(frozen=True)
@@ -13,8 +13,11 @@ class StoryTellerConfigDefaults:
     WRITER_MODEL: str = "gpt2"
     PAINTER_MODEL: str = "stabilityai/stable-diffusion-2"
     SPEAKER_MODEL: str = "tts_models/en/ljspeech/glow-tts"
-    WRITER_DEVICE: str = get_default_device()
-    PAINTER_DEVICE: str = get_default_device()
+    WRITER_DEVICE: str = "cpu"
+    PAINTER_DEVICE: str = "cpu"
+    WRITER_DTYPE: str = "float32"
+    PAINTER_DTYPE: str = "float32"
+    ENABLE_ATTENTION_SLICING: bool = False
 
 
 @dataclass
@@ -25,6 +28,15 @@ class StoryTellerConfig:
     speaker: str = StoryTellerConfigDefaults.SPEAKER_MODEL
     writer_device: str = StoryTellerConfigDefaults.WRITER_DEVICE
     painter_device: str = StoryTellerConfigDefaults.PAINTER_DEVICE
+    writer_dtype: str = StoryTellerConfigDefaults.WRITER_DTYPE
+    painter_dtype: str = StoryTellerConfigDefaults.PAINTER_DTYPE
+    enable_attention_slicing: bool = StoryTellerConfigDefaults.ENABLE_ATTENTION_SLICING
+
+    def __post_init__(self):
+        if not hasattr(torch, self.writer_dtype):
+            raise ValueError(f"Unsupported torch writer dtype {self.writer_dtype}")
+        if not hasattr(torch, self.painter_dtype):
+            raise ValueError(f"Unsupported torch painter dtype {self.painter_dtype}")
 
 
 class StoryTellerConfigArgparseHelpText:
@@ -52,6 +64,15 @@ class StoryTellerConfigArgparseHelpText:
         _get_dataclass_var_name_from_f_string_eq(
             f"{StoryTellerConfig.painter_device=}"
         ): f"Image generation device to use. Default: '{StoryTellerConfigDefaults.PAINTER_DEVICE}'",
+        _get_dataclass_var_name_from_f_string_eq(
+            f"{StoryTellerConfig.writer_dtype=}"
+        ): f"Text generation dtype to use. Default: '{StoryTellerConfigDefaults.WRITER_DTYPE}'",
+        _get_dataclass_var_name_from_f_string_eq(
+            f"{StoryTellerConfig.painter_dtype=}"
+        ): f"Image generation dtype to use. Default: '{StoryTellerConfigDefaults.PAINTER_DTYPE}'",
+        _get_dataclass_var_name_from_f_string_eq(
+            f"{StoryTellerConfig.enable_attention_slicing=}"
+        ): f"Whether to enable attention slicing for diffusion. Default: '{StoryTellerConfigDefaults.ENABLE_ATTENTION_SLICING}'",
     }
 
     @classmethod

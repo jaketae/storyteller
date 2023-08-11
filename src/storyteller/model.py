@@ -3,7 +3,7 @@ from typing import List
 
 import soundfile as sf
 import torch
-from diffusers import StableDiffusionPipeline
+from diffusers import DiffusionPipeline
 from nltk.tokenize import sent_tokenize
 from PIL.Image import Image
 from transformers import pipeline
@@ -26,12 +26,18 @@ class StoryTeller:
         writer_device = torch.device(config.writer_device)
         painter_device = torch.device(config.writer_device)
         self.writer = pipeline(
-            "text-generation", model=config.writer, device=writer_device
+            "text-generation",
+            model=config.writer,
+            device=writer_device,
+            torch_dtype=getattr(torch, config.writer_dtype),
         )
-        self.painter = StableDiffusionPipeline.from_pretrained(
+        self.painter = DiffusionPipeline.from_pretrained(
             config.painter,
             use_auth_token=False,
+            torch_dtype=getattr(torch, config.painter_dtype),
         ).to(painter_device)
+        if config.enable_attention_slicing:
+            self.painter.enable_attention_slicing()
         self.speaker = TTS(config.speaker)
         self.sample_rate = self.speaker.synthesizer.output_sample_rate
         self.output_dir = None

@@ -69,10 +69,12 @@ def main() -> None:
     set_seed(args.seed)
     set_log_level(logging.WARNING)
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
-    config = StoryTellerConfig()
-    for field in dataclasses.fields(config):
-        name = field.name
-        setattr(config, name, getattr(args, name))
+    config = StoryTellerConfig(
+        **{
+            field.name: getattr(args, field.name)
+            for field in dataclasses.fields(StoryTellerConfig)
+        }
+    )
     story_teller = StoryTeller(config)
     os.makedirs(args.output_dir, exist_ok=True)
     story_teller.generate(
