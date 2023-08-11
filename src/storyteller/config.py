@@ -4,16 +4,17 @@ import sys
 from dataclasses import dataclass
 from typing import Dict, Type
 
-import torch
+from storyteller.utils import get_default_device
 
 
+@dataclass(frozen=True)
 class StoryTellerConfigDefaults:
     MAX_NEW_TOKENS: int = 50
     WRITER_MODEL: str = "gpt2"
     PAINTER_MODEL: str = "stabilityai/stable-diffusion-2"
     SPEAKER_MODEL: str = "tts_models/en/ljspeech/glow-tts"
-    WRITER_DEVICE: str = "cuda:0" if torch.cuda.is_available() else "cpu"
-    PAINTER_DEVICE: str = "cuda:0" if torch.cuda.is_available() else "cpu"
+    WRITER_DEVICE: str = get_default_device()
+    PAINTER_DEVICE: str = get_default_device()
 
 
 @dataclass

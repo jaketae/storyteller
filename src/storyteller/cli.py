@@ -2,6 +2,7 @@ import argparse
 import dataclasses
 import logging
 import os
+from dataclasses import dataclass
 
 from storyteller import (
     StoryTeller,
@@ -11,11 +12,11 @@ from storyteller import (
 from storyteller.utils import set_log_level, set_seed
 
 
+@dataclass(frozen=True)
 class ArgparseDefaults:
     WRITER_PROMPT: str = "Once upon a time, unicorns roamed the Earth."
     PAINTER_PROMPT: str = "Beautiful painting"
     OUTPUT_DIR: str = "out"
-
     NUM_IMAGES: int = 10
     SEED: int = 42
 
