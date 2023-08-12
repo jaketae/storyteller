@@ -34,7 +34,8 @@ $ cd storyteller
 $ pip install .
 ```
 
-> **Note**: For Apple M1/2 users, [`mecab-python3`](https://github.com/SamuraiT/mecab-python3) is not available. You need to install `mecab` before running `pip install`. You can do this with [Hombrew](https://www.google.com/search?client=safari&rls=en&q=homebrew&ie=UTF-8&oe=UTF-8) via `brew install mecab`. For more information, refer to https://github.com/SamuraiT/mecab-python3/issues/84.
+> [!NOTE]
+> For Apple Silicon users, [`mecab-python3`](https://github.com/SamuraiT/mecab-python3) is not available. You need to install `mecab` before running `pip install`. You can do this with [Hombrew](https://www.google.com/search?client=safari&rls=en&q=homebrew&ie=UTF-8&oe=UTF-8) via `brew install mecab`. For more information, refer to https://github.com/SamuraiT/mecab-python3/issues/84.
 
 3. (Optional) To develop locally, install `dev` dependencies and install pre-commit hooks. This will automatically trigger linting and code quality checks before each commit.
 
@@ -54,7 +55,7 @@ $ storyteller
 This command will initialize the story with the default prompt of `Once upon a time, unicorns roamed the Earth`. An
 example of the output that will be generated [can be seen in the animation above](#default-output).
 You can customize the beginning of your story by using the `--writer_prompt` argument. For example, if you would like to
-start your story with the text `The ravenous cat, driven by an insatiable craving for tuna, devised a daring plan to break into the local fish market's coveted tuna reserve.`, 
+start your story with the text `The ravenous cat, driven by an insatiable craving for tuna, devised a daring plan to break into the local fish market's coveted tuna reserve.`,
 your CLI command would look as follows:
 
 ```
@@ -64,7 +65,7 @@ storyteller --writer_prompt "The ravenous cat, driven by an insatiable craving f
 The final video will be saved in the `/out/out.mp4` directory, along with other intermediate files such as images,
 audio files, and subtitles.
 
-To adjust the default settings with custom parameters, you can use the different CLI flags as needed. To see a list of 
+To adjust the default settings with custom parameters, you can use the different CLI flags as needed. To see a list of
 all available options, type:
 
 ```
@@ -78,11 +79,13 @@ This will provide you with a list of the options, their descriptions and their d
 options:
   -h, --help            show this help message and exit
   --writer_prompt WRITER_PROMPT
-                        The prompt to be used for the writer model. This is the text with which your story will begin. Default: 'Once upon a time, unicorns roamed the Earth.'
+                        The prompt to be used for the writer model. This is the text with which your story will begin. Default:
+                        'Once upon a time, unicorns roamed the Earth.'
   --painter_prompt_prefix PAINTER_PROMPT_PREFIX
                         The prefix to be used for the painter model's prompt. Default: 'Beautiful painting'
   --num_images NUM_IMAGES
-                        The number of images to be generated. Those images will be composed in sequence into a video. Default: 10
+                        The number of images to be generated. Those images will be composed in sequence into a video. Default:
+                        10
   --output_dir OUTPUT_DIR
                         The directory to save the generated files to. Default: 'out'
   --seed SEED           The seed value to be used for randomization. Default: 42
@@ -95,9 +98,60 @@ options:
                         Text generation device to use. Default: 'cpu'
   --painter_device PAINTER_DEVICE
                         Image generation device to use. Default: 'cpu'
+  --writer_dtype WRITER_DTYPE
+                        Text generation dtype to use. Default: 'float32'
+  --painter_dtype PAINTER_DTYPE
+                        Image generation dtype to use. Default: 'float32'
+  --enable_attention_slicing ENABLE_ATTENTION_SLICING
+                        Whether to enable attention slicing for diffusion. Default: 'False'
 ```
 
 ## Usage
+
+### Command Line Interface
+
+#### CUDA
+
+If you have a CUDA-enabled machine, run
+
+```
+$ storyteller --writer_device cuda --painter_device cuda
+```
+
+to utilize GPU.
+
+You can also place each model on separate devices if loading all models on a single device exceeds available VRAM.
+
+```
+$ storyteller --writer_device cuda:0 --painter_device cuda:1
+```
+
+$ For faster generation, consider using half-precision.
+
+```
+$ storyteller --writer_device cuda --painter_device cuda --writer_dtype float16 --painter_dtype float16
+```
+
+#### Apple Silicon
+
+> [!NOTE]
+> PyTorch support for Apple Silicon ([MPS](https://pytorch.org/docs/stable/notes/mps.html)) is work in progress. At the time of writing, `torch.cumsum` does not work with `torch.int64` ([issue](https://github.com/pytorch/pytorch/issues/96610)) on PyTorch stable 2.0.1; it works on nightly only.
+
+If you are on an Apple Silicon machine, run
+
+```
+$ storyteller --writer_device mps --painter_device mps
+```
+
+if you want to use MPS acceleration for both models.
+
+For faster generation, consider enabling [attention-slicing](https://huggingface.co/docs/diffusers/optimization/fp16#sliced-attention-for-additional-memory-savings) to save on memory.
+
+```
+$ storyteller --enable_attention_slicing true
+```
+
+### Python
 
 For more advanced use cases, you can also directly interface with Story Teller in Python code.
 
