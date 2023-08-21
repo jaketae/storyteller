@@ -4,11 +4,8 @@ import logging
 import os
 from dataclasses import dataclass
 
-from storyteller import (
-    StoryTeller,
-    StoryTellerConfig,
-    StoryTellerConfigArgparseHelpText,
-)
+from storyteller import StoryTeller, StoryTellerConfig
+from storyteller.config import StoryTellerConfigArgparseHelpText
 from storyteller.utils import set_log_level, set_seed
 
 
