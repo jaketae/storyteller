@@ -79,6 +79,7 @@ class StoryTeller:
     ) -> None:
         video_paths = []
         self.output_dir = output_dir
+        os.makedirs(output_dir, exist_ok=True)
         sentences = self.write_story(writer_prompt, num_images)
         for i, sentence in enumerate(sentences):
             video_path = self._generate(i, sentence, painter_prompt_prefix)

@@ -73,7 +73,6 @@ def main() -> None:
         }
     )
     story_teller = StoryTeller(config)
-    os.makedirs(args.output_dir, exist_ok=True)
     story_teller.generate(
         args.writer_prompt, args.painter_prompt_prefix, args.num_images, args.output_dir
     )
