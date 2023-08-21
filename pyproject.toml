@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "storyteller-core"
-version = "0.0.3"
+version = "0.0.4"
 description = "Multimodal AI Story Teller, built with Stable Diffusion, GPT, and neural text-to-speech"
 authors = ["Jaesung Tae <jaesungtae@gmail.com>"]
 readme = "README.md"
