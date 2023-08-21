@@ -18,6 +18,8 @@ class StoryTellerConfigDefaults:
     WRITER_DTYPE: str = "float32"
     PAINTER_DTYPE: str = "float32"
     ENABLE_ATTENTION_SLICING: bool = False
+    USE_DPM_SOLVER: bool = True
+    NUM_PAINTER_STEPS: int = 20
 
 
 @dataclass
@@ -31,6 +33,8 @@ class StoryTellerConfig:
     writer_dtype: str = StoryTellerConfigDefaults.WRITER_DTYPE
     painter_dtype: str = StoryTellerConfigDefaults.PAINTER_DTYPE
     enable_attention_slicing: bool = StoryTellerConfigDefaults.ENABLE_ATTENTION_SLICING
+    use_dpm_solver: bool = StoryTellerConfigDefaults.USE_DPM_SOLVER
+    num_painter_steps: int = StoryTellerConfigDefaults.NUM_PAINTER_STEPS
 
     def __post_init__(self):
         if not hasattr(torch, self.writer_dtype):
@@ -73,6 +77,12 @@ class StoryTellerConfigArgparseHelpText:
         _get_dataclass_var_name_from_f_string_eq(
             f"{StoryTellerConfig.enable_attention_slicing=}"
         ): f"Whether to enable attention slicing for diffusion. Default: '{StoryTellerConfigDefaults.ENABLE_ATTENTION_SLICING}'",
+        _get_dataclass_var_name_from_f_string_eq(
+            f"{StoryTellerConfig.use_dpm_solver=}"
+        ): f"Whether to use DPM solver for faster generation. Default: '{StoryTellerConfigDefaults.USE_DPM_SOLVER}'",
+        _get_dataclass_var_name_from_f_string_eq(
+            f"{StoryTellerConfig.num_painter_steps=}"
+        ): f"Number of inference steps for stable diffusion. Default: '{StoryTellerConfigDefaults.NUM_PAINTER_STEPS}'",
     }
 
     @classmethod

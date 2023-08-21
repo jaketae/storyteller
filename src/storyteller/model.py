@@ -3,7 +3,7 @@ from typing import List
 
 import soundfile as sf
 import torch
-from diffusers import DiffusionPipeline
+from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
 from nltk.tokenize import sent_tokenize
 from PIL.Image import Image
 from transformers import pipeline
@@ -36,6 +36,10 @@ class StoryTeller:
             use_auth_token=False,
             torch_dtype=getattr(torch, config.painter_dtype),
         ).to(painter_device)
+        if config.use_dpm_solver:
+            self.painter.scheduler = DPMSolverMultistepScheduler.from_config(
+                self.painter.scheduler.config
+            )
         if config.enable_attention_slicing:
             self.painter.enable_attention_slicing()
         self.speaker = TTS(config.speaker)
@@ -49,7 +53,9 @@ class StoryTeller:
 
     @torch.inference_mode()
     def paint(self, prompt: str) -> Image:
-        return self.painter(prompt).images[0]
+        return self.painter(
+            prompt, num_inference_steps=self.config.num_painter_steps
+        ).images[0]
 
     @torch.inference_mode()
     def speak(self, prompt: str) -> List[int]:
