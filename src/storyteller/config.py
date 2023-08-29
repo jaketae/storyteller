@@ -15,6 +15,7 @@ class StoryTellerConfigDefaults:
     SPEAKER_MODEL: str = "tts_models/en/ljspeech/glow-tts"
     WRITER_DEVICE: str = "cpu"
     PAINTER_DEVICE: str = "cpu"
+    SPEAKER_DEVICE: str = "cpu"
     WRITER_DTYPE: str = "float32"
     PAINTER_DTYPE: str = "float32"
     ENABLE_ATTENTION_SLICING: bool = False
@@ -30,6 +31,7 @@ class StoryTellerConfig:
     speaker: str = StoryTellerConfigDefaults.SPEAKER_MODEL
     writer_device: str = StoryTellerConfigDefaults.WRITER_DEVICE
     painter_device: str = StoryTellerConfigDefaults.PAINTER_DEVICE
+    speaker_device: str = StoryTellerConfigDefaults.SPEAKER_DEVICE
     writer_dtype: str = StoryTellerConfigDefaults.WRITER_DTYPE
     painter_dtype: str = StoryTellerConfigDefaults.PAINTER_DTYPE
     enable_attention_slicing: bool = StoryTellerConfigDefaults.ENABLE_ATTENTION_SLICING
@@ -68,6 +70,9 @@ class StoryTellerConfigArgparseHelpText:
         _get_dataclass_var_name_from_f_string_eq(
             f"{StoryTellerConfig.painter_device=}"
         ): f"Image generation device to use. Default: '{StoryTellerConfigDefaults.PAINTER_DEVICE}'",
+        _get_dataclass_var_name_from_f_string_eq(
+            f"{StoryTellerConfig.speaker_device=}"
+        ): f"Audio generation device to use. Default: '{StoryTellerConfigDefaults.SPEAKER_DEVICE}'",
         _get_dataclass_var_name_from_f_string_eq(
             f"{StoryTellerConfig.writer_dtype=}"
         ): f"Text generation dtype to use. Default: '{StoryTellerConfigDefaults.WRITER_DTYPE}'",

@@ -25,6 +25,7 @@ class StoryTeller:
         self.config = config
         writer_device = torch.device(config.writer_device)
         painter_device = torch.device(config.writer_device)
+        speaker_device = torch.device(config.speaker_device)
         self.writer = pipeline(
             "text-generation",
             model=config.writer,
@@ -42,7 +43,7 @@ class StoryTeller:
             )
         if config.enable_attention_slicing:
             self.painter.enable_attention_slicing()
-        self.speaker = TTS(config.speaker)
+        self.speaker = TTS(config.speaker).to(speaker_device)
         self.sample_rate = self.speaker.synthesizer.output_sample_rate
         self.output_dir = None
 
